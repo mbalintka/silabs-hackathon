@@ -70,6 +70,7 @@ void ezBLE_on_receive(int bytes) {
 }
 
 void setup() {
+  resetTFT();
   Serial.begin(115200);
   delay(1000);
   Serial.println("BLE Thermostat - Server");
@@ -88,4 +89,12 @@ void setup() {
 void loop() {
   // nincs dolga, csak vár
   LowPower.idle(1000);
+}
+
+void resetTFT(){
+  pinMode(PD2,OUTPUT);
+  digitalWrite(PD2,LOW);
+  delay(100);
+  digitalWrite(PD2,HIGH);
+  delay(100);
 }

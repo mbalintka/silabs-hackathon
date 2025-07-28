@@ -38,9 +38,9 @@
 #include <SPI.h>
 
 
-#define TFT_CS        (PA7)
-#define TFT_RST        (PB3) // Or set to -1 and connect to Arduino RESET pin
-#define TFT_DC         (PB0)
+#define TFT_CS   (PA7)
+#define TFT_RST  (PD2) // Or set to -1 and connect to Arduino RESET pin
+#define TFT_DC   (PB0)
 #define TFT_MOSI (PC3) // Data out
 #define TFT_SCLK (PC1)  // Clock out
 
@@ -53,7 +53,17 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RS
 
 float p = 3.1415926;
 
+ void resetTFT(){
+  pinMode(TFT_RST,OUTPUT);
+  digitalWrite(TFT_RST,LOW);
+  delay(100);
+  digitalWrite(TFT_RST,HIGH);
+  delay(100);
+
+ }
+
 void setup(void) {
+  resetTFT();
   Serial.begin(115200);
   Serial.print(F("Hello! ST77xx TFT Test"));
 

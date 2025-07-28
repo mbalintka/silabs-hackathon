@@ -2,9 +2,13 @@
 
 #include <ezBLE.h>
 #include "ArduinoLowPower.h"
+#include <SHTC3.h>
 
 #define DEVICE_ID "TERMFEJ_001"
 #define SLEEP_DURATION_MS 5000
+#define TFT_RST (PD2)
+
+SHTC3 sensor(Wire1);
 
 struct ThermoheadStatus {
   String deviceId;
@@ -18,9 +22,13 @@ float readBatteryVoltage() {
   return 3.72;
 }
 
+
+
 float readLocalTemperature() {
   // Dummy temp
-  return 21.5;
+  float temperature,humidity;
+  sensor.read(temperature, humidity);
+  return temperature;
 }
 
 int readValvePosition() {
@@ -57,8 +65,13 @@ void ezBLE_on_receive(int bytes) {
 }
 
 void setup() {
+  
   Serial.begin(115200);
   delay(500);
+  if (!sensor.begin()) {
+    Serial.println("Failed to initialize SHTC3 sensor");
+    while (1);
+  }
   Serial.println("BLE Thermofej - Client");
 
   ezBLE.beginClient("BLE_THERMOSTAT");
@@ -89,4 +102,12 @@ void setup() {
 
 void loop() {
   // Soha nem fut le, mert deepSleep után újraindul
+}
+
+void resetTFT(){
+  pinMode(PD2,OUTPUT);
+  digitalWrite(PD2,LOW);
+  delay(100);
+  digitalWrite(PD2,HIGH);
+  delay(100);
 }
